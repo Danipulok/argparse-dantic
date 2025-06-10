@@ -15,7 +15,8 @@
 See [documentation](https://pydantic-argparse.supimdos.com) for help.
 
 ## Requirements
-Requires Python 3.8+, and is compatible with the Pydantic v1 API.
+Requires Python 3.10+, and is compatible with the Pydantic library.
+Use Rich for better console output.
 
 ## Installation
 Installation with `pip` is simple:
