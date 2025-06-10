@@ -9,6 +9,7 @@
 <a href="https://pepy.tech/project/pydantic-argparse"><img src="https://img.shields.io/pepy/dt/pydantic-argparse?color=blue"></a>
 <a href="https://github.com/SupImDos/pydantic-argparse/blob/master/LICENSE"><img src="https://img.shields.io/github/license/SupImDos/pydantic-argparse"></a>
 <br>
+</div>
 
 ## Help
 See [documentation](https://pydantic-argparse.supimdos.com) for help.
