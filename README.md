@@ -2,21 +2,13 @@
 <!-- Logo -->
 <a href="https://pydantic-argparse.supimdos.com"><img src="https://raw.githubusercontent.com/SupImDos/pydantic-argparse/master/docs/assets/images/logo.svg" width="50%"></a>
 <!-- Headings -->
-<h1>Pydantic Argparse</h1>
-<p><em>Typed Argument Parsing with Pydantic</em></p>
+<h1>Argparse Dantic</h1>
+<p><em>Typed Argument Parsing with Pydantic Enhanced</em></p>
 <!-- Badges (Row 1) -->
-<a href="https://pypi.python.org/pypi/pydantic-argparse"><img src="https://img.shields.io/pypi/v/pydantic-argparse"></a>
+<a href="https://pypi.python.org/pypi/argparse-dantic"><img src="https://img.shields.io/pypi/v/pydantic-argparse"></a>
 <a href="https://pepy.tech/project/pydantic-argparse"><img src="https://img.shields.io/pepy/dt/pydantic-argparse?color=blue"></a>
-<a href="https://github.com/SupImDos/pydantic-argparse"><img src="https://img.shields.io/pypi/pyversions/pydantic-argparse"></a>
 <a href="https://github.com/SupImDos/pydantic-argparse/blob/master/LICENSE"><img src="https://img.shields.io/github/license/SupImDos/pydantic-argparse"></a>
 <br>
-<!-- Badges (Row 2) -->
-<a href="https://github.com/SupImDos/pydantic-argparse/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/supimdos/pydantic-argparse/test.yml?label=tests"></a>
-<a href="https://app.codecov.io/github/SupImDos/pydantic-argparse"><img src="https://img.shields.io/codecov/c/github/SupImDos/pydantic-argparse"></a>
-<a href="https://github.com/SupImDos/pydantic-argparse/actions/workflows/lint.yml"><img src="https://img.shields.io/github/actions/workflow/status/supimdos/pydantic-argparse/lint.yml?label=linting"></a>
-<a href="https://github.com/SupImDos/pydantic-argparse/actions/workflows/format.yml"><img src="https://img.shields.io/github/actions/workflow/status/supimdos/pydantic-argparse/format.yml?label=formatting"></a>
-<a href="https://github.com/SupImDos/pydantic-argparse/actions/workflows/type.yml"><img src="https://img.shields.io/github/actions/workflow/status/supimdos/pydantic-argparse/type.yml?label=typing"></a>
-</div>
 
 ## Help
 See [documentation](https://pydantic-argparse.supimdos.com) for help.
@@ -27,30 +19,28 @@ Requires Python 3.8+, and is compatible with the Pydantic v1 API.
 ## Installation
 Installation with `pip` is simple:
 ```console
-$ pip install pydantic-argparse
+$ pip install argparse-dantic
 ```
 
 ## Example
 ```py
-import pydantic.v1 as pydantic
-
-import pydantic_argparse
+from argparse_dantic import ArgumentParser, BaseModel, Field
 
 
-class Arguments(pydantic.BaseModel):
+class Arguments(BaseModel):
     # Required Args
-    string: str = pydantic.Field(description="a required string", aliases=["-s"])
-    integer: int = pydantic.Field(description="a required integer", aliases=["-i"])
-    flag: bool = pydantic.Field(description="a required flag", aliases=["-f"])
+    string: str = Field(description="a required string", aliases=["-s"])
+    integer: int = Field(description="a required integer", aliases=["-i"])
+    flag: bool = Field(description="a required flag", aliases=["-f"])
 
     # Optional Args
-    second_flag: bool = pydantic.Field(False, description="an optional flag")
-    third_flag: bool = pydantic.Field(True, description="an optional flag")
+    second_flag: bool = Field(False, description="an optional flag")
+    third_flag: bool = Field(True, description="an optional flag")
 
 
 def main() -> None:
     # Create Parser and Parse Args
-    parser = pydantic_argparse.ArgumentParser(
+    parser = ArgumentParser(
         model=Arguments,
         prog="Example Program",
         description="Example Description",

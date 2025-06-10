@@ -1,42 +1,45 @@
 """Commands Example."""
 
-import pydantic.v1 as pydantic
-
-import pydantic_argparse
+from argparse_dantic import (
+    ArgumentParser, BaseModel, Field, ActionNameBind,
+    FilePath, IPvAnyAddress
+)
 
 from typing import Optional
 
+class MyBaseModel(BaseModel):
+    action_name: ActionNameBind
 
-class BuildCommand(pydantic.BaseModel):
+class BuildCommand(MyBaseModel):
     """Build Command Arguments."""
 
     # Required Args
-    location: pydantic.FilePath = pydantic.Field(description="build location")
+    location: FilePath = Field(description="build location")
 
 
-class ServeCommand(pydantic.BaseModel):
+class ServeCommand(MyBaseModel):
     """Serve Command Arguments."""
 
     # Required Args
-    address: pydantic.IPvAnyAddress = pydantic.Field(description="serve address")
-    port: int = pydantic.Field(description="serve port")
+    address: IPvAnyAddress = Field(description="serve address")
+    port: int = Field(description="serve port")
 
 
-class Arguments(pydantic.BaseModel):
+class Arguments(MyBaseModel):
     """Command-Line Arguments."""
 
     # Optional Args
-    verbose: bool = pydantic.Field(False, description="verbose flag")
+    verbose: bool = Field(False, description="verbose flag")
 
     # Commands
-    build: Optional[BuildCommand] = pydantic.Field(description="build command")
-    serve: Optional[ServeCommand] = pydantic.Field(description="serve command")
+    build: Optional[BuildCommand] = Field(description="build command")
+    serve: Optional[ServeCommand] = Field(description="serve command")
 
 
 def main() -> None:
     """Main Function."""
     # Create Parser and Parse Args
-    parser = pydantic_argparse.ArgumentParser(
+    parser = ArgumentParser(
         model=Arguments,
         prog="Example Program",
         description="Example Description",
