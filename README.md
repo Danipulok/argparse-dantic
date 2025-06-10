@@ -89,5 +89,53 @@ $ python3 example.py --string hello -i 42 -f
 string='hello' integer=42 flag=True second_flag=False third_flag=True
 ```
 
+## Advanced Example
+```py
+from argparse_dantic import ArgumentParser, BaseModel, Field, ActionNameBind
+
+class GlobalModel(BaseModel):
+    action_name: ActionNameBind # This is a special field that binds the action name to the model
+    verbose: bool = Field(False, description="verbose output", global_=True)
+    debug: bool = Field(False, description="debug output", global_=True)
+
+class PubOptionsModel(BaseModel):
+    target: str = Field(description="build target", aliases=["-t"])
+    clean: bool = Field(False, description="clean build", aliases=["--c"])
+
+class BuildCommandModel(GlobalModel, PubOptionsModel):
+    build_type: str = Field(description="build type", aliases=["-bt"])
+
+class InstallCommandModel(GlobalModel, PubOptionsModel):
+    install_type: str = Field(description="install type", aliases=["-it"])
+
+class BasicModel(GlobalModel):
+    build: BuildCommandModel = Field(aliases=["bd"], description="build command")
+    install: InstallCommandModel = Field(aliases=["ins"], description="install command")
+
+def main() -> None:
+    # Create Parser and Parse Args
+    parser = ArgumentParser(
+        model=BasicModel,
+        prog="Example Program",
+        description="Example Description",
+        version="0.0.1",
+        epilog="Example Epilog",
+    )
+    args = parser.parse_typed_args()
+
+    # Print Args
+    print(args)
+
+    # Get Command Arguments Faster
+    command_arguments = getattr(args, args.action_name)
+
+    # Get Global Arguments Faster
+    verbose = args.global_data.get("verbose")
+    debug = args.global_data.get("debug")
+    # In child models you can also access global data
+    # verbose = command_arguments.global_data.get("verbose")
+    # debug = command_arguments.global_data.get("debug")
+```
+
 ## License
 This project is licensed under the terms of the MIT license.
