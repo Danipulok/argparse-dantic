@@ -7,18 +7,20 @@ Python standard library `argparse` class of the same name.
 """
 
 import argparse
+import sys
 from gettext import gettext as _
-from typing import Any, Callable, Iterable, Optional, Sequence, Tuple, TypeVar, Union, cast, TYPE_CHECKING
-
+from typing import Any, Callable, cast, Iterable, Optional, Sequence, Tuple, TYPE_CHECKING, TypeVar, Union
 
 if TYPE_CHECKING:
     from argparse_dantic import BaseModel
     from argparse_dantic import ArgumentParser
-    
+
     BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 
 # Constants
 T = TypeVar("T")
+SUPPORTS_DEPRECATED_PARAM: bool = sys.version_info >= (3, 13)
+
 
 class Action(argparse.Action):
     if TYPE_CHECKING:
@@ -34,7 +36,7 @@ class Action(argparse.Action):
         metavar: Optional[Union[str, Tuple[str, ...]]]
         deprecated: bool
         model: Optional[BaseModelT]
-    
+
     def __init__(
         self,
         option_strings,
@@ -50,21 +52,27 @@ class Action(argparse.Action):
         deprecated=False,
         model=None
     ):
-        super().__init__(
-            option_strings=option_strings,
-            dest=dest,
-            nargs=nargs,
-            const=const,
-            default=default,
-            type=type,
-            choices=choices,
-            required=required,
-            help=help,
-            metavar=metavar,
-            deprecated=deprecated
-        )
+        # Prepare kwargs for parent constructor
+        parent_kwargs: dict[str, Any] = {
+            "option_strings": option_strings,
+            "dest": dest,
+            "nargs": nargs,
+            "const": const,
+            "default": default,
+            "type": type,
+            "choices": choices,
+            "required": required,
+            "help": help,
+            "metavar": metavar,
+        }
+
+        # Only pass deprecated parameter if Python version >= 3.13
+        if SUPPORTS_DEPRECATED_PARAM:
+            parent_kwargs["deprecated"] = deprecated
+
+        super().__init__(**parent_kwargs)
         self.model = model
-    
+
     def __call__(
         self,
         parser: 'ArgumentParser',
